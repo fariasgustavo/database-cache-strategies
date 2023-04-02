@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  server:
+    container_name: server-nodejs
+    build: .
+    volumes:
+      - ./:/usr/src/app 
+    ports:
+      - 8000:8000
+    depends_on:
+      - cache
+      - database
+  
+  cache:
+    container_name: cache-service
+    image: redis:alpine
+    volumes:
+      - ./cache-data:/data
+      - ./config:/usr/local/etc/redis
+    ports:
+      - 6379:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+  
+  database:
+    container_name: database-service
+    image: postgres:alpine
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: test234
+      POSTGRES_USER: cache-admin
+      POSTGRES_DB: stocks
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

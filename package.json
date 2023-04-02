@@ -1,0 +1,14 @@
+{
+  "name": "cache-strategies",
+  "description": "description",
+  "authors": "Gustavo Farias",
+  "version": "1.0.0",
+  "main": "index.jss",
+  "dependencies": {
+    "redis": "^4.2.0",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0"
+  }
+}
