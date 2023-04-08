@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Server Debugger",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "remoteRoot": "/usr/src/app",
+            "localRoot": "${workspaceFolder}",
+            "restart": true,
+            "address": "0.0.0.0",
+            "skipFiles": ["<node_internals>/**"],
+        }
+    ]
+}

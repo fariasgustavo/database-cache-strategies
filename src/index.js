@@ -1,5 +1,6 @@
 const http = require("http");
 const redis = require("redis");
+const { getFromCache } = require('./lib/cache');
 
 const cacheClient = redis.createClient({
   url: "redis://default:cachepass@cache:6379",
@@ -26,27 +27,11 @@ const routes = {
     const timestap = new Date().getTime();
 
     console.time(`Response Time ${timestap}`);
-    const cachedData = await cacheClient.get("credit_card_numbers");
-
-    if (cachedData) {
-      console.timeLog(`Response Time ${timestap}`);
-
-      response.writeHead(200);
-      response.write(JSON.stringify(cachedData));
-
-      return response.end();
-    }
-
-    const result = await databaseConnection.query(
-      "SELECT * FROM credit_cards;"
-    );
-
-    await databaseConnection.end();
-    await cacheClient.set("credit_card_numbers", JSON.stringify(result.rows));
-
+    const data = await getFromCache(cacheClient, databaseConnection);
     console.timeLog(`Response Time ${timestap}`);
+    
     response.writeHead(200);
-    response.write(JSON.stringify(result.rows));
+    response.write(JSON.stringify(data));
 
     return response.end();
   },

@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["node", "index.js"]
+CMD ["node", "--inspect=0.0.0.0:9229", "./src/index.js"]
