@@ -1,6 +1,6 @@
 const http = require("http");
 const redis = require("redis");
-const { getFromCache } = require('./lib/cache');
+const { createCreditCard } = require('./lib/cache');
 
 const cacheClient = redis.createClient({
   url: "redis://default:cachepass@cache:6379",
@@ -22,6 +22,20 @@ const getDatabaseConnection = () => {
 
 const databaseConnection = getDatabaseConnection();
 
+const getBodyFromRequest = (request) => {
+  let body = [];
+
+  return new Promise((resolve, reject) => {
+    request.on('data', (chunk) => {
+      body.push(chunk);
+    }).on('end', () => {
+      body = Buffer.concat(body).toString();
+
+      resolve(JSON.parse(body));
+    });
+  });
+}
+
 const routes = {
   "/credit-card/numbers:get": async (request, response) => {
     const timestap = new Date().getTime();
@@ -30,6 +44,16 @@ const routes = {
     const data = await getFromCache(cacheClient, databaseConnection);
     console.timeLog(`Response Time ${timestap}`);
     
+    response.writeHead(200);
+    response.write(JSON.stringify(data));
+
+    return response.end();
+  },
+  "/credit-card:post": async (request, response) => {
+    const body = await getBodyFromRequest(request);
+
+    const data = await createCreditCard(body);
+
     response.writeHead(200);
     response.write(JSON.stringify(data));
 
