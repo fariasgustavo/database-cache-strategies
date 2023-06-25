@@ -2,16 +2,19 @@ version: '3'
 
 services:
   server:
-    container_name: server-nodejs
+    container_name: api-service
     build: .
     volumes:
-      - ./:/usr/src/app 
+      - ./:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
     ports:
       - 8000:8000
       - 9229:9229
     depends_on:
       - cache
       - database
+    env_file:
+      - .env
   
   cache:
     container_name: cache-service
@@ -30,7 +33,7 @@ services:
     environment: 
       POSTGRES_PASSWORD: test234
       POSTGRES_USER: cache-admin
-      POSTGRES_DB: stocks
+      POSTGRES_DB: cache-example
       PG_DATA: /var/lib/postgresql/data
     volumes:
       - ./database:/var/lib/postgresql/data

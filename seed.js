@@ -8,7 +8,7 @@ const databaseConnection = async () => {
   const pool = new Pool({
     user: "cache-admin",
     password: "test234",
-    database: "stocks",
+    database: "cache-example",
     host: "localhost",
     port: 5432,
   });

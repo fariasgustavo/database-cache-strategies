@@ -4,6 +4,9 @@
   "authors": "Gustavo Farias",
   "version": "1.0.0",
   "main": "index.jss",
+  "scripts": {
+    "seed": "node seed.js"
+  },
   "dependencies": {
     "redis": "^4.2.0",
     "pg": "^8.7.3"
